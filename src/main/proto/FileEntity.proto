@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package com.example.fileservice;
+
+option java_package = "com.example.fileservice";
+option java_outer_classname = "FileEntityProto";
+
+message FileEntity {
+  string fileName = 1;
+  string absolutePath = 2;
+}
+
