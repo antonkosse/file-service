@@ -16,6 +16,6 @@ public class KafkaCommunicationService {
     private KafkaTemplate<String, byte[]> kafkaTemplate;
 
     public void sendProtobufToTopic(FileEntityProto.FileEntity data) {
-        kafkaTemplate.send("files-topic", data.toByteArray());
+        kafkaTemplate.send(topicName, data.toByteArray());
     }
 }
