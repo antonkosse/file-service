@@ -42,16 +42,13 @@ public class FileServiceImplTest {
         }
     }
 
-    @Test
-    public void getAllFilesInFolder_testIncorrectFolder() {
+    @Test(expected = NoSuchFileException.class)
+    public void getAllFilesInFolder_testIncorrectFolder() throws NoSuchFileException {
         final String folder = "folder1412414%#@!";
 
-        try {
-            List<FileEntity> foldersList = fileService.getAllFilesInFolder(folder);
-            Assert.assertTrue("Found specified folder", foldersList.isEmpty());
-        } catch (NoSuchFileException e) {
-            Assert.assertEquals("Couldn't find specified folder", e.getMessage());
-        }
+        List<FileEntity> foldersList = fileService.getAllFilesInFolder(folder);
+        Assert.assertTrue("Found specified folder", foldersList.isEmpty());
+
     }
 
     @Test
