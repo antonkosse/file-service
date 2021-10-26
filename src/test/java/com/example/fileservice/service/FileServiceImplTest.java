@@ -19,27 +19,9 @@ public class FileServiceImplTest {
     private FileServiceImpl fileService;
 
     @Test
-    public void getAllFolders_testCorrectRoot() {
-        try {
-            List<FileEntity> foldersList = fileService.getAllFolders();
-            Assert.assertFalse("File storage is empty", foldersList.isEmpty());
-        } catch (NoSuchFileException e) {
-            Assert.fail("Couldn't get all folders");
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void getAllFilesInFolder_testCorrectFolder() {
-        final String folder = "folder1";
-
-        try {
-            List<FileEntity> foldersList = fileService.getAllFilesInFolder(folder);
-            Assert.assertFalse("No files in the subfolder", foldersList.isEmpty());
-        } catch (NoSuchFileException e) {
-            Assert.fail("Couldn't get files in the subfolder");
-            e.printStackTrace();
-        }
+    public void getAllFolders_testCorrectRoot() throws NoSuchFileException {
+        List<FileEntity> foldersList = fileService.getAllFolders();
+        Assert.assertFalse("File storage is empty", foldersList.isEmpty());
     }
 
     @Test(expected = NoSuchFileException.class)
