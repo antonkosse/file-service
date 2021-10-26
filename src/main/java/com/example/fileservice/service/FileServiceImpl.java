@@ -1,5 +1,6 @@
 package com.example.fileservice.service;
 
+import com.example.fileservice.FileEntityProto;
 import com.example.fileservice.entity.FileEntity;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,6 +69,14 @@ public class FileServiceImpl implements FileService {
         }
 
         return "";
+    }
+
+    public FileEntityProto.FileEntity convertEntityToProtobuf(FileEntity entity) {
+
+        return FileEntityProto.FileEntity.newBuilder()
+                .setAbsolutePath(entity.getAbsolutePath())
+                .setFileName(entity.getName())
+                .build();
     }
 
     public String getRootDirectory() {
