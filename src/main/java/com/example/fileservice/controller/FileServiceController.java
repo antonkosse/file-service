@@ -3,6 +3,7 @@ package com.example.fileservice.controller;
 import com.example.fileservice.FileEntityProto;
 import com.example.fileservice.entity.FileEntity;
 import com.example.fileservice.service.FileServiceImpl;
+import com.example.fileservice.service.KafkaCommunicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,7 +29,7 @@ public class FileServiceController {
     private FileServiceImpl fileService;
 
     @Autowired
-    private KafkaTemplate<String, byte[]> kafkaTemplate;
+    private KafkaCommunicationService kafkaService;
 
     @Operation(summary = "Get all folders in the root of file storage")
     @ApiResponses(value = {
@@ -56,7 +57,7 @@ public class FileServiceController {
             @ApiResponse(responseCode = "500", description = "Couldn't list files in the subfolder.")
     })
     @GetMapping("/list-files/{folderName}")
-    public List<FileEntity> getFilesOfFolder(@PathVariable String folderName) {
+    public List<FileEntity> getFilesOfFolder(@PathVariable String folderName) throws NoSuchFileException {
         return fileService.getAllFilesInFolder(folderName);
     }
 
@@ -78,17 +79,7 @@ public class FileServiceController {
         }
 
         FileEntityProto.FileEntity protoEntity = fileService.convertEntityToProtobuf(file);
-        kafkaTemplate.send("files-topic", protoEntity.toByteArray());
+        kafkaService.sendProtobufToTopic(protoEntity);
         return protoEntity;
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<String> handleException(NoSuchFileException exception) {
-        return new ResponseEntity<>("Couldn't find specified file/directory: " + exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<String> handleException(Exception exception) {
-        return new ResponseEntity<>("Something went wrong: " + exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

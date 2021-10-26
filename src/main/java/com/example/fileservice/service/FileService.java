@@ -9,7 +9,7 @@ public interface FileService {
 
     List<FileEntity> getAllFolders() throws NoSuchFileException;
 
-    List<FileEntity> getAllFilesInFolder(String folderName);
+    List<FileEntity> getAllFilesInFolder(String folderName) throws NoSuchFileException;
 
     String getAbsolutePathOfFile(String fileName);
 

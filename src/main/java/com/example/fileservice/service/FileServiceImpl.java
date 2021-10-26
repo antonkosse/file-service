@@ -44,17 +44,17 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    public List<FileEntity> getAllFilesInFolder(String folderName) {
+    public List<FileEntity> getAllFilesInFolder(String folderName) throws NoSuchFileException {
         String filePathToCheck = this.storageDirectory + "\\" + folderName;
         File folderWithFiles = new File(filePathToCheck);
-
-        if (folderWithFiles != null) {
+        File[] files = folderWithFiles.listFiles();
+        if (files != null) {
             return Stream.of(folderWithFiles.listFiles())
                     .filter(File::isFile)
                     .map(file -> new FileEntity(file.getName(), file.getAbsolutePath()))
                     .collect(Collectors.toList());
         } else {
-            return Collections.emptyList();
+            throw new NoSuchFileException("Couldn't find specified folder");
         }
     }
 
